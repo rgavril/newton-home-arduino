@@ -110,8 +110,6 @@ void setup() {
 
     // Add serial commands
     espSerial.addCommand("@RELAY_SET"  , cmd_onRelaySet);
-    espSerial.addCommand("@RELAY_GET"  , cmd_onRelayGet);
-    espSerial.addCommand("@SENSOR_GET" , cmd_onSensorGet);
     espSerial.addCommand("@RELAYS_GET" , cmd_onRelaysGet);
     espSerial.addCommand("@SENSORS_GET", cmd_onSensorsGet);
 }

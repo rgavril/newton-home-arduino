@@ -12,8 +12,6 @@ void cmd_ButtonNotify  (uint8_t buttonId);
 
 
 void cmd_onRelaySet   (void);
-void cmd_onRelayGet   (void);
-void cmd_onSensorGet  (void);
 void cmd_onSensorsGet (void);
 void cmd_onRelaysGet  (void);
 

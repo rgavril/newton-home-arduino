@@ -52,39 +52,6 @@ void cmd_onRelaySet(void) {
     relay[relayId].setState(state);
 }
 
-/**
- * @brief Handler of the @RELAY_GET command that is issued by ESP8266 when it
- * wants to receive the state of a relay. After receiving this command we will 
- * send back a @RELAY_NOTIFY (defined above).
- * 
- * @RELAY_GET <relayId>
- */
-void cmd_onRelayGet(void) {
-    char *arg1 = espSerial.next(); if (arg1 == NULL) return;
-
-    uint8_t relayId = atoi(arg1);
-    if (relayId >= MAX_RELAYS) { return; }
-
-    cmd_RelayNotify(relayId);
-}
-
-/**
- * @brief Handler of the @SENSOR_GET command that is issued by ESP8266 when it
- * wants to receive the state of a sensor. After receiving this command we will 
- * send back a @SENSOR_NOTIFY (defined above).
- * 
- * @SENSOR_GET <sensorId>
- */
-void cmd_onSensorGet(void) {
-    char *arg1 = espSerial.next(); if (arg1 == NULL) return;
-
-    uint8_t sensorId = atoi(arg1);
-    if (sensorId >= MAX_SENSORS) { return; }
-
-    cmd_SensorNotify(sensorId);
-}
-
-
 void cmd_onRelaysGet(void) {
     cmd_RelaysNotify();
 }
