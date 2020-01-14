@@ -3,7 +3,7 @@
 Button::Button(uint8_t pin, bool pullupEnabled /*=true*/)
 {
     uint32_t currentTime = millis();
-    bool currentState = Button::RELEASED;
+    bool currentState = digitalRead(pin); // Button::RELEASED;
 
     pinMode(pin, pullupEnabled ? INPUT_PULLUP : INPUT);
 
