@@ -50,6 +50,8 @@ void cmd_onRelaySet(void) {
 
     bool state = atoi(arg2);
     relay[relayId].setState(state);
+    
+    cmd_RelayNotify(relayId);
 }
 
 void cmd_onRelaysGet(void) {

@@ -33,21 +33,21 @@ Relay relay[MAX_RELAYS] = {
 };
 
 Button button[MAX_BUTTONS] = {
-    Button(13), // Buton 0 - Baie Oaspeti S1
-    Button(12), // Buton 1 - Dormitor Hol
-    Button(11), // Buton 2 - Intrare
-    Button(10), // Buton 3 - Perete Dining S4
-    Button(9),  // Buton 4 - Baie Oaspeti S3
-    Button(8),  // Buton 5 - Balcon
-    Button(7),  // Buton 6 - Baie Dormitor S1
-    Button(6),  // Buton 7 - Birou
-    Button(25), // Buton 8 - Dressing
-    Button(26), // Buton 9 - Perete Dining S2
-    Button(27), // Buton 10 - Baie Dormitor S2
-    Button(28), // Buton 11 - Baie Oaspeti S2
-    Button(29), // Buton 12 - Perete Dining S3
-    Button(30), // Buton 13 - Perete Dining S1
-    Button(24)  // Buton 14 - Dormitor
+    Button(28), // Buton 0 - Baie Oaspeti S1
+    Button(24), // Buton 1 - Dormitor Hol
+    Button(13), // Buton 2 - Intrare
+    Button(9), // Buton 3 - Perete Dining S4
+    Button(30),  // Buton 4 - Baie Oaspeti S3
+    Button(10),  // Buton 5 - Balcon
+    Button(26),  // Buton 6 - Baie Dormitor S1
+    Button(27),  // Buton 7 - Birou
+    Button(7), // Buton 8 - Dressing
+    Button(11), // Buton 9 - Perete Dining S2
+    Button(25), // Buton 10 - Baie Dormitor S2
+    Button(29), // Buton 11 - Baie Oaspeti S2
+    Button(6), // Buton 12 - Perete Dining S3
+    Button(8), // Buton 13 - Perete Dining S1
+    Button(12)  // Buton 14 - Dormitor
 };
 
 Button sensor[MAX_SENSORS] = {
@@ -63,8 +63,15 @@ Button sensor[MAX_SENSORS] = {
  * @param buttonId The id of the button that will be checked for clicks
  * @param relayId  The id of the relay that will be toggled
  */
-void toggleRelayOnButtonPress(int buttonId, int relayId) {
+void toggleRelayOnClick(int buttonId, int relayId) {
+
     if (button[buttonId].getEvent() == Button::EVENT_CLICK) {
+        relay[relayId].toggleState();
+    }
+}
+
+void toggleRelayOnLongPress(int buttonId, int relayId) {
+    if (button[buttonId].getEvent() == Button::EVENT_LONG_PRESS) {
         relay[relayId].toggleState();
     }
 }
@@ -100,13 +107,23 @@ void setup() {
     // FIXME: Use PIN 3 as GND for MAX485 (Fix this by changing the cable in the panel)
     pinMode(3, OUTPUT); digitalWrite(3, LOW);
 
-    // Load relay states from 
-    // persistentData.load();
-    // for (int i=0; i<MAX_RELAYS; i++) {
-    //     if (i != RELAY_ENTRANCE_DOOR) {
-    //         relay[i].setState(persistentData.getRelayState(i));
-    //     }
-    // }
+    // Load relay states from EEPROM
+    persistentData.load();
+    for (int i=0; i<MAX_RELAYS; i++) {
+        if (i != RELAY_ENTRANCE_DOOR) {
+            relay[i].setState(persistentData.getRelayState(i));
+        }
+    }
+    
+    // Notify ESP8266 of the current sensor states
+    for (int i=0; i<MAX_SENSORS; i++) {
+        cmd_SensorNotify(i);
+    }
+
+    // Notify ESP8266 of the current relay states
+    for (int i=0; i<MAX_RELAYS; i++) {
+        cmd_RelayNotify(i);
+    }
 
     // Add serial commands
     espSerial.addCommand("@RELAY_SET"  , cmd_onRelaySet);
@@ -144,21 +161,22 @@ void loop() {
     }
 
     // Perform lightswitch actions
-    toggleRelayOnButtonPress(BUTTON_OFFICE            , RELAY_OFFICE_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_BEDROOM           , RELAY_BEDROOM_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_BEDROOM_HALLWAY   , RELAY_BEDROOM_HALLWAY_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_BEDROOM_BATHROOM_1, RELAY_BEDROOM_BATHROOM_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_BEDROOM_BATHROOM_2, RELAY_BEDROOM_BATHROOM_FAN);
-    toggleRelayOnButtonPress(BUTTON_DINING_BALCONY    , RELAY_BALCONY_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_DINING_WALL_1     , RELAY_ENTRANCE_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_DINING_WALL_2     , RELAY_DINING_SPOT_LIGHT);
-    //toggleRelayOnButtonPress(BUTTON_DINING_WALL_3     , RELAY_LIVING_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_DINING_WALL_4     , RELAY_DINING_TABLE_LIGHT);
-    //toggleRelayOnButtonPress(BUTTON_LIVING_BATHROOM_1 , RELAY_LIVING_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_LIVING_BATHROOM_2 , RELAY_LIVING_BATHROOM_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_LIVING_BATHROOM_3 , RELAY_LIVING_BATHROOM_FAN);
-    toggleRelayOnButtonPress(BUTTON_DRESSING_WALL     , RELAY_DRESSING_LIGHT);
-    toggleRelayOnButtonPress(BUTTON_ENTRANCE          , RELAY_ENTRANCE_LIGHT);
+    toggleRelayOnClick(BUTTON_OFFICE            , RELAY_OFFICE_LIGHT);
+    toggleRelayOnClick(BUTTON_BEDROOM_HALLWAY   , RELAY_BEDROOM_HALLWAY_LIGHT);
+    toggleRelayOnClick(BUTTON_BEDROOM_BATHROOM_1, RELAY_BEDROOM_BATHROOM_LIGHT);
+    toggleRelayOnClick(BUTTON_BEDROOM_BATHROOM_2, RELAY_BEDROOM_BATHROOM_FAN);
+    toggleRelayOnClick(BUTTON_DINING_BALCONY    , RELAY_BALCONY_LIGHT);
+    toggleRelayOnClick(BUTTON_DINING_WALL_1     , RELAY_ENTRANCE_LIGHT);
+    toggleRelayOnClick(BUTTON_DINING_WALL_2     , RELAY_DINING_SPOT_LIGHT);
+    toggleRelayOnClick(BUTTON_DINING_WALL_4     , RELAY_DINING_TABLE_LIGHT);
+    toggleRelayOnClick(BUTTON_LIVING_BATHROOM_2 , RELAY_LIVING_BATHROOM_LIGHT);
+    toggleRelayOnClick(BUTTON_LIVING_BATHROOM_3 , RELAY_LIVING_BATHROOM_FAN);
+    toggleRelayOnClick(BUTTON_DRESSING_WALL     , RELAY_DRESSING_LIGHT);
+    toggleRelayOnClick(BUTTON_ENTRANCE          , RELAY_ENTRANCE_LIGHT);
+
+    toggleRelayOnLongPress(BUTTON_BEDROOM           , RELAY_BEDROOM_LIGHT);
+    toggleRelayOnLongPress(BUTTON_DINING_WALL_3     , RELAY_LIVING_LIGHT);
+    toggleRelayOnLongPress(BUTTON_LIVING_BATHROOM_1 , RELAY_LIVING_LIGHT);
 
     // Make sure the door relay will not stay open for to long
     automaticallyCloseDoor();
@@ -191,5 +209,5 @@ void loop() {
         persistentData.setRelayState(i, relay[i].getState());
     }
 
-    //persistentData.save(); //<-- Avoid this until production to save EEPROM
+    persistentData.save(); //<-- Avoid this until production to save EEPROM
 }
