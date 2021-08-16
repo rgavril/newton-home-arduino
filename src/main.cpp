@@ -35,7 +35,8 @@ Relay relay[MAX_RELAYS] = {
 Button button[MAX_BUTTONS] = {
     Button(28), // Buton 0 - Baie Oaspeti S1
     Button(24), // Buton 1 - Dormitor Hol
-    Button(13), // Buton 2 - Intrare
+    // Button(13), // Buton 2 - Intrare
+    Button(4), // Buton 2 - Intrare
     Button(9), // Buton 3 - Perete Dining S4
     Button(30),  // Buton 4 - Baie Oaspeti S3
     Button(10),  // Buton 5 - Balcon
