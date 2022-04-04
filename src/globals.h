@@ -36,14 +36,16 @@ enum {
     BUTTON_LIVING_BATHROOM_3,  // Buton 4 : Baile Oaspeti S3
     BUTTON_DINING_BALCONY,     // Buton 5 : Balcon
     BUTTON_BEDROOM_BATHROOM_1, // Buton 6 : Baie Dormitor S1
-    BUTTON_OFFICE,             // Buton 7 : Birou
+    BUTTON_OFFICE_1,           // Buton 7 : Birou S1
     BUTTON_DRESSING_WALL,      // Buton 8 : Dressing
     BUTTON_DINING_WALL_2,      // Buton 9 : Perete Dining S2
     BUTTON_BEDROOM_BATHROOM_2, // Buton 10: Baie Dormitor S2
     BUTTON_LIVING_BATHROOM_2,  // Buton 11: Baie Oaspeti S2
     BUTTON_DINING_WALL_3,      // Buton 12: Perete Dining S3
     BUTTON_DINING_WALL_1,      // Buton 13: Perete Dining S1
-    BUTTON_BEDROOM,            // Buton 14: Dormitor
+    BUTTON_BEDROOM_1,          // Buton 14: Dormitor S2 / Dormitor Pat
+    BUTTON_BEDROOM_2,          // Buton 15: Dormitor S1
+    BUTTON_OFFICE_2,           // Buton 16: Birou S2
 
     MAX_BUTTONS
 };
@@ -51,6 +53,8 @@ enum {
 enum {
     SENSOR_ENTRY_DOOR,    // Sensor 0 - Usa Intrare
     SENSOR_LIVING_WINDOW, // Sensor 1 - Geam Living
+    SENSOR_FUM,           // Sensor 2 - Fum        
+    SENSOR_APA,           // Sensor 3 - Apa
 
     MAX_SENSORS
 };
