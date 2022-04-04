@@ -42,6 +42,14 @@ Button button[MAX_BUTTONS] = {
     Button(26), // Buton 6 - Baie Dormitor S1
     Button(27), // Buton 7 - Birou S1
     Button(7),  // Buton 8 - Dressing
+    // Button(13), // Buton 2 - Intrare
+    Button(4), // Buton 2 - Intrare
+    Button(9), // Buton 3 - Perete Dining S4
+    Button(30),  // Buton 4 - Baie Oaspeti S3
+    Button(10),  // Buton 5 - Balcon
+    Button(26),  // Buton 6 - Baie Dormitor S1
+    Button(27),  // Buton 7 - Birou
+    Button(7), // Buton 8 - Dressing
     Button(11), // Buton 9 - Perete Dining S2
     Button(25), // Buton 10 - Baie Dormitor S2
     Button(29), // Buton 11 - Baie Oaspeti S2
